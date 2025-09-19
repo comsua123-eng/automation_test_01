@@ -1,23 +1,20 @@
-import { test, expect } from '@playwright/test';
-
-// Update with your actual credentials
-const validUsername = 'testuser';
-const validPassword = 'password123';
-
-test('Successful login with valid credentials', async ({ page }) => {
-  // Navigate to the Shopee login page
-  await page.goto('https://shopee.vn/buyer/login');
-
-  // Enter valid username
-  await page.fill('#login-username', validUsername);
-
-  // Enter valid password
-  await page.fill('#login-password', validPassword);
-
-  // Click the 'Login' button
-  await page.click('button:has-text("Đăng nhập")'); // Update the selector if needed
-
-  // Assertion: Check for successful login (e.g., presence of a specific element on the home page)
-  // This assertion needs to be adapted based on the actual UI after successful login
-  await expect(page.locator('.some-element-on-homepage')).toBeVisible();
-});
+aW1wb3J0IHsgdGVzdCwgZXhwZWN0IH0gZnJvbSAnQHBsYXl3cmlnaHQvdGVz
+dCc7CgovLyBVcGRhdGUgd2l0aCB5b3VyIGFjdHVhbCBjcmVkZW50aWFscwpj
+b25zdCB2YWxpZFVzZXJuYW1lID0gJ3Rlc3R1c2VyJzsKY29uc3QgdmFsaWRQ
+YXNzd29yZCA9ICdwYXNzd29yZDEyMyc7Cgp0ZXN0KCdTdWNjZXNzZnVsIGxv
+Z2luIHdpdGggdmFsaWQgY3JlZGVudGlhbHMnLCBhc3luYyAoeyBwYWdlIH0p
+ID0+IHsKICAvLyBOYXZpZ2F0ZSB0byB0aGUgU2hvcGVlIGxvZ2luIHBhZ2UK
+ICBhd2FpdCBwYWdlLmdvdG8oJ2h0dHBzOi8vc2hvcGVlLnZuL2J1eWVyL2xv
+Z2luJyk7CgogIC8vIEVudGVyIHZhbGlkIHVzZXJuYW1lCiAgYXdhaXQgcGFn
+ZS5maWxsKCcjbG9naW4tdXNlcm5hbWUnLCB2YWxpZFVzZXJuYW1lKTsKCiAg
+Ly8gRW50ZXIgdmFsaWQgcGFzc3dvcmQKICBhd2FpdCBwYWdlLmZpbGwoJyNs
+b2dpbi1wYXNzd29yZCcsIHZhbGlkUGFzc3dvcmQpOwoKICAvLyBDbGljayB0
+aGUgJ0xvZ2luJyBidXR0b24KICBhd2FpdCBwYWdlLmNsaWNrKCdidXR0b246
+aGFzLXRleHQoIsSQxINuZyBuaOG6rXAiKScpOyAvLyBVcGRhdGUgdGhlIHNl
+bGVjdG9yIGlmIG5lZWRlZAoKICAvLyBBc3NlcnRpb246IENoZWNrIGZvciBz
+dWNjZXNzZnVsIGxvZ2luIChlLmcuLCBwcmVzZW5jZSBvZiBhIHNwZWNpZmlj
+IGVsZW1lbnQgb24gdGhlIGhvbWUgcGFnZSkKICAvLyBUaGlzIGFzc2VydGlv
+biBuZWVkcyB0byBiZSBhZGFwdGVkIGJhc2VkIG9uIHRoZSBhY3R1YWwgVUkg
+YWZ0ZXIgc3VjY2Vzc2Z1bCBsb2dpbgogIGF3YWl0IGV4cGVjdChwYWdlLmxv
+Y2F0b3IoJy5zb21lLWVsZW1lbnQtb24taG9tZXBhZ2UnKSkudG9CZVZpc2li
+bGUoKTsKfSk7
