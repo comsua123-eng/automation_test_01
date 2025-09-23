@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout source code
+      # 1. Checkout code
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -19,33 +19,58 @@ jobs:
       - name: Setup JDK 17
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          distribution: temurin
+          java-version: 17
           cache: maven
 
-      # 3. Build & run tests with Maven
-      - name: Run Selenium Tests
-        run: mvn -B test
+      # 3. Cache Maven dependencies
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
 
-      # 4. Collect test results (Surefire hoặc TestNG XML)
-      - name: Collect test results
-        if: always()
+      # 4. Build & Run Selenium Tests with Maven (TestNG)
+      - name: Run Selenium Tests
+        run: mvn clean test -Dsurefire.reportFormat=plain -DskipTests=false
+
+      # 5. Collect Allure results
+      - name: Collect Allure results
+        run: |
+          mkdir -p allure-results
+          cp -r target/allure-results/* allure-results/ || true
+
+      # 6. Collect Surefire reports (JUnit/TestNG XML)
+      - name: Collect Surefire reports
         run: |
           mkdir -p test-results
           cp -r target/surefire-reports/* test-results/ || true
-          cp -r target/test-output/* test-results/ || true
 
-      # 5. Convert results to JSON (tuỳ bạn có tool hay không)
-      - name: Generate JSON results
-        run: |
-          echo '{"status":"ok","note":"Chưa parse XML sang JSON, cần tool convert"}' > test-results.json
+      # 7. Upload artifacts (backup)
+      - name: Upload test artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-artifacts
+          path: |
+            allure-results/
+            test-results/
+          retention-days: 14
 
-      # 6. Gửi kết quả về n8n webhook
-      - name: Send results to n8n webhook
+      # 8. Send results to n8n Webhook
+      - name: Send Allure JSON to n8n
+        if: always()
         run: |
-          curl -X POST "${{ secrets.N8N_WEBHOOK_URL }}" \
-            -H "Content-Type: application/json" \
-            -d @test-results.json \
-            --max-time 30 \
-            --retry 3 \
-            --fail-with-body || echo "Failed to send results to webhook"
+          if [ -f "allure-results/categories.json" ]; then
+            curl -X POST "${{ secrets.N8N_WEBHOOK_URL }}" \
+              -H "Content-Type: application/json" \
+              -d @allure-results/categories.json \
+              --max-time 30 --retry 3 || echo "⚠️ Failed to send Allure results"
+          else
+            echo '{"status":"no allure results found"}' > tmp.json
+            curl -X POST "${{ secrets.N8N_WEBHOOK_URL }}" \
+              -H "Content-Type: application/json" \
+              -d @tmp.json
+          fi
