@@ -1,40 +1,44 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-         http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
+
   <groupId>com.automation</groupId>
   <artifactId>automation_test_java</artifactId>
   <version>1.0-SNAPSHOT</version>
   <name>Automation Test Java</name>
+  <packaging>jar</packaging>
 
   <properties>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <selenium.version>4.23.0</selenium.version>
+    <testng.version>7.10.2</testng.version>
   </properties>
 
   <dependencies>
-    <!-- ✅ Selenium Java -->
+    <!-- Selenium Java -->
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>selenium-java</artifactId>
-      <version>4.21.0</version>
+      <version>${selenium.version}</version>
     </dependency>
 
-    <!-- ✅ TestNG -->
+    <!-- TestNG -->
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
-      <version>7.10.2</version>
+      <version>${testng.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
 
   <build>
     <plugins>
-      <!-- ✅ Maven Surefire Plugin để chạy TestNG -->
+      <!-- Maven Surefire Plugin để chạy test -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -42,7 +46,11 @@
         <configuration>
           <includes>
             <include>**/*Test.java</include>
+            <include>**/*Tests.java</include>
+            <include>**/*TestCase.java</include>
           </includes>
+          <testFailureIgnore>false</testFailureIgnore>
+          <useSystemClassLoader>true</useSystemClassLoader>
         </configuration>
       </plugin>
     </plugins>
